@@ -10,15 +10,55 @@
     rel="stylesheet">
   <style>
     :root {
-      --bg: #09090b;
-      --surface: #18181b;
-      --surface2: #27272a;
-      --border: #3f3f46;
+      --bg: #060b16;
+      --surface: #0d1527;
+      --surface2: #18233c;
+      --border: #243354;
       --accent: #38bdf8;
       --accent2: #c084fc;
+      --accent-rgb: 56, 189, 248;
+      --accent2-rgb: 192, 132, 252;
       --text: #f4f4f5;
-      --muted: #a1a1aa;
+      --muted: #8ca0ca;
       --danger: #f87171;
+      --nav-bg: rgba(6, 11, 22, 0.85);
+    }
+
+    html[data-theme="light"] {
+      --bg: #faf0f4;
+      --surface: #ffffff;
+      --surface2: #f5e4ed;
+      --border: #ebd1df;
+      --text: #1b0d15;
+      --muted: #523a49;
+      --danger: #e11d48;
+      --nav-bg: rgba(250, 240, 244, 0.85);
+    }
+
+    /* Light mode premium overrides */
+    html[data-theme="light"] .project-card:hover,
+    html[data-theme="light"] .tilt-card:hover {
+      box-shadow: 0 20px 60px rgba(27, 13, 21, 0.08);
+    }
+    html[data-theme="light"] .resume-mock {
+      box-shadow: 0 30px 80px rgba(27, 13, 21, 0.10);
+    }
+    html[data-theme="light"] .ts-toggle {
+      box-shadow: 0 4px 12px rgba(27, 13, 21, 0.06);
+    }
+    html[data-theme="light"] .ts-panel {
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 8px 32px rgba(27, 13, 21, 0.08);
+    }
+    html[data-theme="light"] .ts-color:hover {
+      border-color: var(--text);
+    }
+    html[data-theme="light"] .training-card:hover {
+      box-shadow: 0 16px 50px rgba(27, 13, 21, 0.08);
+    }
+    html[data-theme="light"] ::placeholder {
+      color: #b091a1;
+      opacity: 1;
     }
 
     * {
@@ -51,6 +91,8 @@
       opacity: 0.4;
     }
 
+
+
     /* ── NAV ── */
     nav {
       position: fixed;
@@ -68,7 +110,7 @@
     }
 
     nav.scrolled {
-      background: rgba(10, 10, 15, 0.85);
+      background: var(--nav-bg);
       border-color: var(--border);
       backdrop-filter: blur(20px);
     }
@@ -92,9 +134,30 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       transition: color 0.3s;
+      position: relative;
+      padding: 0.4rem 0;
     }
 
-    .nav-links a:hover {
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
       color: var(--accent);
     }
 
@@ -108,42 +171,7 @@
       overflow: hidden;
     }
 
-    .hero-bg-circle {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-    }
 
-    .hero-bg-circle:nth-child(1) {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(200, 169, 110, 0.12), transparent 70%);
-      top: -100px;
-      right: -100px;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .hero-bg-circle:nth-child(2) {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(124, 111, 255, 0.10), transparent 70%);
-      bottom: -50px;
-      left: 200px;
-      animation: float 10s ease-in-out infinite reverse;
-    }
-
-    @keyframes float {
-
-      0%,
-      100% {
-        transform: translateY(0) scale(1);
-      }
-
-      50% {
-        transform: translateY(-30px) scale(1.05);
-      }
-    }
 
     .hero-inner {
       display: grid;
@@ -434,7 +462,7 @@
       height: 10px;
       border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(200, 169, 110, 0.15);
+      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.15);
     }
 
     .timeline-meta {
@@ -476,36 +504,165 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.7rem;
       color: var(--accent2);
-      border: 1px solid rgba(124, 111, 255, 0.3);
+      border: 1px solid rgba(var(--accent2-rgb), 0.2);
+      background: rgba(var(--accent2-rgb), 0.04);
       padding: 0.2rem 0.6rem;
-      border-radius: 2px;
+      border-radius: 4px;
       letter-spacing: 0.05em;
+    }
+
+    /* ── PROJECT VISUAL HEADERS ── */
+    .project-visual-header {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.6s ease;
+    }
+
+    .project-card:hover .project-visual-header {
+      transform: scale(1.05);
+    }
+
+    .header-nids {
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.08), rgba(var(--accent2-rgb), 0.02));
+    }
+
+    .header-keylogger {
+      background: linear-gradient(135deg, rgba(var(--accent2-rgb), 0.08), rgba(var(--accent-rgb), 0.02));
+    }
+
+    .proj-svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--accent);
+      z-index: 2;
+      filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.3));
+      transition: transform 0.4s ease;
+    }
+    
+    .header-keylogger .proj-svg {
+      stroke: var(--accent2);
+      filter: drop-shadow(0 0 8px rgba(var(--accent2-rgb), 0.3));
+    }
+
+    .project-card:hover .proj-svg {
+      transform: rotate(5deg) scale(1.1);
+    }
+
+    .visual-node {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    
+    .header-keylogger .visual-node {
+      background: var(--accent2);
+    }
+
+    .node-1 { top: 25%; left: 30%; }
+    .node-2 { top: 70%; left: 75%; }
+    .node-3 { top: 40%; left: 80%; }
+    .node-4 { top: 65%; left: 20%; }
+
+    .visual-connection {
+      position: absolute;
+      border: 1px dashed var(--border);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .conn-1 {
+      width: 100px;
+      height: 1px;
+      top: 45%;
+      left: 20%;
+      transform: rotate(20deg);
+    }
+
+    .conn-2 {
+      width: 80px;
+      height: 1px;
+      top: 60%;
+      left: 55%;
+      transform: rotate(-35deg);
+    }
+
+    .visual-pulse-ring {
+      position: absolute;
+      border: 1px solid rgba(var(--accent-rgb), 0.25);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: visualRingPulse 4s infinite linear;
+    }
+    
+    .header-keylogger .visual-pulse-ring {
+      border-color: rgba(var(--accent2-rgb), 0.25);
+    }
+
+    .ring-1 {
+      width: 120px;
+      height: 120px;
+      opacity: 0.6;
+    }
+
+    .ring-2 {
+      width: 180px;
+      height: 180px;
+      opacity: 0.3;
+      animation-delay: -2s;
+    }
+
+    @keyframes visualRingPulse {
+      0% {
+        transform: scale(0.85);
+        opacity: 0.8;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(0.85);
+        opacity: 0.8;
+      }
     }
 
     /* ── PROJECTS ── */
     .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
     }
 
     .project-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: 6px;
       overflow: hidden;
+      display: grid;
+      grid-template-columns: 280px 1fr;
       transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
       cursor: pointer;
     }
 
     .project-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       border-color: var(--accent);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
     }
 
     .project-img {
-      height: 200px;
+      height: 100%;
+      min-height: 220px;
       position: relative;
       overflow: hidden;
     }
@@ -555,20 +712,27 @@
     }
 
     .project-link {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
       color: var(--accent);
       text-decoration: none;
-      border: 1px solid rgba(200, 169, 110, 0.3);
-      padding: 0.25rem 0.7rem;
-      border-radius: 2px;
-      letter-spacing: 0.05em;
-      transition: all 0.2s;
+      border: 1px solid var(--border);
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.3s ease;
+      background: rgba(var(--accent-rgb), 0.02);
     }
 
     .project-link:hover {
       background: var(--accent);
       color: var(--bg);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.15);
     }
 
     .certs-grid {
@@ -1043,6 +1207,7 @@
       border-radius: 2px;
       align-self: flex-start;
       transition: all 0.3s;
+      margin-bottom: 1.5rem;
     }
 
     .form-submit:hover {
@@ -1443,7 +1608,7 @@
     #cursor-ring {
       width: 36px;
       height: 36px;
-      border: 1px solid rgba(200, 169, 110, 0.5);
+      border: 1px solid rgba(var(--accent-rgb), 0.4);
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
@@ -1473,10 +1638,33 @@
       top: 0;
       left: 0;
       z-index: 200;
-      height: 2px;
+      height: 3px;
       width: 0%;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width 0.1s linear;
+      box-shadow: 0 0 12px var(--accent), 0 0 6px var(--accent2);
+      transition: width 0.08s ease-out;
+    }
+
+    /* ── CUSTOM SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      border: 2px solid var(--bg);
+      border-radius: 999px;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      border: 1px solid var(--bg);
     }
 
     /* ── SECTION REVEAL (scroll-triggered) ── */
@@ -1732,28 +1920,7 @@
       width: 60px;
     }
 
-    /* ── FLOATING NAV DOT INDICATOR ── */
-    .nav-links a {
-      position: relative;
-    }
 
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a.active::after {
-      width: 100%;
-    }
 
     /* ── COUNTER ANIMATION ── */
     .stat-number {
@@ -1774,7 +1941,7 @@
 
     /* ── TIMELINE DOT PULSE ── */
     .timeline-item::before {
-      box-shadow: 0 0 0 4px rgba(200, 169, 110, 0.15);
+      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.15);
       animation: dotPulse 2.5s ease-in-out infinite;
     }
 
@@ -1782,11 +1949,11 @@
 
       0%,
       100% {
-        box-shadow: 0 0 0 4px rgba(200, 169, 110, 0.15);
+        box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.15);
       }
 
       50% {
-        box-shadow: 0 0 0 8px rgba(200, 169, 110, 0.04);
+        box-shadow: 0 0 0 8px rgba(var(--accent-rgb), 0.04);
       }
     }
 
@@ -1803,7 +1970,7 @@
       left: -100%;
       width: 60%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(200, 169, 110, 0.04), transparent);
+      background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.04), transparent);
       transition: left 0.5s ease;
     }
 
@@ -1836,7 +2003,7 @@
     .orb-1 {
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, rgba(200, 169, 110, 0.07), transparent 70%);
+      background: radial-gradient(circle, rgba(var(--accent-rgb), 0.07), transparent 70%);
       top: 10vh;
       right: -100px;
     }
@@ -1844,7 +2011,7 @@
     .orb-2 {
       width: 400px;
       height: 400px;
-      background: radial-gradient(circle, rgba(124, 111, 255, 0.07), transparent 70%);
+      background: radial-gradient(circle, rgba(var(--accent2-rgb), 0.07), transparent 70%);
       bottom: 20vh;
       left: -80px;
     }
@@ -1874,7 +2041,7 @@
     /* ── CONTACT FORM INPUT FOCUS GLOW ── */
     .form-group input:focus,
     .form-group textarea:focus {
-      box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.12);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.12);
     }
 
     /* ── SOCIAL LINK SLIDE-IN ── */
@@ -1890,7 +2057,7 @@
     }
 
     .social-link:hover {
-      box-shadow: 0 4px 20px rgba(200, 169, 110, 0.12);
+      box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.12);
     }
 
     /* ── SCROLL-TO-TOP BUTTON ── */
@@ -1939,13 +2106,13 @@
       opacity: 0.55;
     }
 
-    /* ── MATRIX RAIN ── */
-    #matrix-canvas {
+    /* ── FLOWER PETALS ── */
+    #petals-canvas {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.04;
+      opacity: 0.35;
     }
 
     /* ── FLOATING GEOMETRIC SHAPES ── */
@@ -2029,7 +2196,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(200, 169, 110, 0.15), transparent);
+      background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.15), transparent);
       animation: scanLabel 3s ease-in-out infinite;
     }
 
@@ -2055,11 +2222,11 @@
 
       0%,
       100% {
-        box-shadow: 0 0 0 0 rgba(200, 169, 110, 0);
+        box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0);
       }
 
       50% {
-        box-shadow: 0 0 18px 1px rgba(200, 169, 110, 0.06);
+        box-shadow: 0 0 18px 1px rgba(var(--accent-rgb), 0.06);
       }
     }
 
@@ -2072,7 +2239,7 @@
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      border: 1px solid rgba(200, 169, 110, 0.2);
+      border: 1px solid rgba(var(--accent-rgb), 0.2);
       animation: orbitRing 3s linear infinite;
     }
 
@@ -2128,7 +2295,7 @@
       inset: -1px;
       border-radius: 4px;
       border: 1px solid transparent;
-      background: linear-gradient(135deg, rgba(200, 169, 110, 0.3), rgba(124, 111, 255, 0.3)) border-box;
+      background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.3), rgba(var(--accent2-rgb), 0.3)) border-box;
       -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: destination-out;
       mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
@@ -2187,7 +2354,7 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(200, 169, 110, 0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.4), transparent);
       animation: mockScan 2.5s linear infinite;
       pointer-events: none;
     }
@@ -2226,7 +2393,7 @@
       }
 
       50% {
-        border-color: rgba(200, 169, 110, 0.2);
+        border-color: rgba(var(--accent-rgb), 0.2);
       }
     }
 
@@ -2380,7 +2547,7 @@
     /* ── NAV ACTIVE LINK GLOW ── */
     .nav-links a.active {
       color: var(--accent);
-      text-shadow: 0 0 12px rgba(200, 169, 110, 0.6);
+      text-shadow: 0 0 10px var(--accent);
       animation: navActivePulse 2s ease-in-out infinite;
     }
 
@@ -2388,11 +2555,11 @@
 
       0%,
       100% {
-        text-shadow: 0 0 8px rgba(200, 169, 110, 0.4);
+        text-shadow: 0 0 6px var(--accent);
       }
 
       50% {
-        text-shadow: 0 0 20px rgba(200, 169, 110, 0.9);
+        text-shadow: 0 0 16px var(--accent);
       }
     }
 
@@ -2430,11 +2597,57 @@
 
       0%,
       100% {
-        box-shadow: 0 0 0 0 rgba(200, 169, 110, 0);
+        box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0);
       }
 
       50% {
-        box-shadow: 0 0 0 8px rgba(200, 169, 110, 0.1);
+        box-shadow: 0 0 0 8px rgba(var(--accent-rgb), 0.1);
+      }
+    }
+
+    /* ── WAVING HAND EMOJI ── */
+    .wave-emoji {
+      display: inline-block;
+      transform-origin: 70% 70%;
+      transition: transform 0.3s ease;
+    }
+
+    .revealed .wave-emoji,
+    .wave-emoji:hover {
+      animation: waveHand 1.5s ease-in-out infinite;
+    }
+
+    @keyframes waveHand {
+      0% {
+        transform: rotate(0.0deg)
+      }
+
+      15% {
+        transform: rotate(14.0deg)
+      }
+
+      30% {
+        transform: rotate(-8.0deg)
+      }
+
+      45% {
+        transform: rotate(14.0deg)
+      }
+
+      60% {
+        transform: rotate(-4.0deg)
+      }
+
+      75% {
+        transform: rotate(10.0deg)
+      }
+
+      90% {
+        transform: rotate(0.0deg)
+      }
+
+      100% {
+        transform: rotate(0.0deg)
       }
     }
 
@@ -2590,6 +2803,15 @@
         gap: 1rem;
         text-align: center;
       }
+
+      .project-card {
+        grid-template-columns: 1fr;
+      }
+
+      .project-img {
+        height: 200px;
+        min-height: 200px;
+      }
     }
 
     /* ── THEME SWITCHER ── */
@@ -2657,16 +2879,102 @@
       transform: scale(1.15);
       border-color: #fff;
     }
+
+    /* ── MODE SWITCHER BUTTONS ── */
+    .mode-toggle-btn {
+      background: rgba(24, 35, 60, 0.4);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mode-toggle-btn:hover {
+      background: rgba(24, 35, 60, 0.8);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .ts-mode-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .ts-mode-btn:hover {
+      transform: scale(1.15);
+      border-color: var(--accent);
+    }
   </style>
 </head>
 
 <body>
 
+  <script>
+    (function () {
+      const currentTheme = localStorage.getItem('portfolio-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+
+      let accentIndex = localStorage.getItem('portfolio-accent-index');
+      if (accentIndex === null) {
+        const savedAccent = localStorage.getItem('portfolio-accent');
+        if (savedAccent === '#34d399') accentIndex = '1';
+        else if (savedAccent === '#fbbf24') accentIndex = '2';
+        else if (savedAccent === '#a3e635') accentIndex = '3';
+        else accentIndex = '0';
+        localStorage.setItem('portfolio-accent-index', accentIndex);
+      }
+      
+      const themeAccents = {
+        dark: [
+          { a: '#38bdf8', a2: '#c084fc' },
+          { a: '#34d399', a2: '#3b82f6' },
+          { a: '#fbbf24', a2: '#f43f5e' },
+          { a: '#a3e635', a2: '#06b6d4' }
+        ],
+        light: [
+          { a: '#0284c7', a2: '#7c3aed' },
+          { a: '#059669', a2: '#1d4ed8' },
+          { a: '#d97706', a2: '#be185d' },
+          { a: '#4d7c0f', a2: '#0369a1' }
+        ]
+      };
+
+      const index = parseInt(accentIndex, 10);
+      const accent = themeAccents[currentTheme][index] || themeAccents[currentTheme][0];
+      
+      document.documentElement.style.setProperty('--accent', accent.a);
+      document.documentElement.style.setProperty('--accent2', accent.a2);
+      
+      function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex.trim());
+        return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '56, 189, 248';
+      }
+      document.documentElement.style.setProperty('--accent-rgb', hexToRgb(accent.a));
+      document.documentElement.style.setProperty('--accent2-rgb', hexToRgb(accent.a2));
+    })();
+  </script>
+
   <!-- AURORA BACKGROUND -->
   <canvas id="aurora-canvas"></canvas>
 
-  <!-- MATRIX RAIN -->
-  <canvas id="matrix-canvas"></canvas>
+  <!-- FLOWER PETALS -->
+  <canvas id="petals-canvas"></canvas>
 
   <!-- LOADER -->
   <div id="loader">
@@ -2707,7 +3015,7 @@
       <a href="#projects">Projects</a>
       <a href="#training">Training</a>
       <a href="#skills">Skills</a>
-      <a href="#certificates">Certificates</a>
+      <a href="#certificates">Certifications/Certificates</a>
       <a href="#achievements">Achievements</a>
       <a href="#education">Education</a>
       <a href="#resume">Resume</a>
@@ -2717,8 +3025,6 @@
 
   <!-- HERO -->
   <div id="hero">
-    <div class="hero-bg-circle"></div>
-    <div class="hero-bg-circle"></div>
     <div class="hero-inner">
       <div class="hero-text">
         <div class="hero-tag">Aspiring Cybersecurity Professional</div>
@@ -2734,7 +3040,7 @@
       </div>
       <div class="profile-pic-wrap">
         <div class="profile-pic-inner">
-          <img src="profile.jpeg" alt="Profile Photo">
+          <img src="profile.jpg" alt="Profile Photo">
         </div>
       </div>
     </div>
@@ -2871,7 +3177,21 @@
 
       <div class="project-card">
         <div class="project-img">
-          <div class="project-img-placeholder" style="background: linear-gradient(135deg, #0a1628, #1a3a5c);">🛡️</div>
+          <div class="project-visual-header header-nids">
+            <div class="visual-node node-1"></div>
+            <div class="visual-node node-2"></div>
+            <div class="visual-node node-3"></div>
+            <div class="visual-node node-4"></div>
+            <div class="visual-connection conn-1"></div>
+            <div class="visual-connection conn-2"></div>
+            <div class="visual-pulse-ring ring-1"></div>
+            <div class="visual-pulse-ring ring-2"></div>
+            <svg class="proj-svg" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <circle cx="12" cy="11" r="3"></circle>
+              <path d="M12 14v4"></path>
+            </svg>
+          </div>
           <div class="project-img-overlay"></div>
         </div>
         <div class="project-body">
@@ -2880,19 +3200,46 @@
             Random Forest on the CIC-IDS2017 dataset. Built an interactive real-time monitoring dashboard using
             Streamlit.</p>
           <div class="timeline-tags" style="margin-bottom:1rem;">
-            <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">Streamlit</span><span
-              class="tag">Pandas</span>
+            <span class="tag">Python</span>
+            <span class="tag">Scikit-learn</span>
+            <span class="tag">Streamlit</span>
+            <span class="tag">Pandas</span>
           </div>
           <div class="project-links">
-            <a href="https://github.com/piyushprakash70/AI_NIDS_Project" target="_blank" class="project-link">GitHub
-              →</a>
+            <a href="https://github.com/piyushprakash70/AI_NIDS_Project" target="_blank" class="project-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              </svg>
+              GitHub
+            </a>
           </div>
         </div>
       </div>
 
       <div class="project-card">
         <div class="project-img">
-          <div class="project-img-placeholder" style="background: linear-gradient(135deg, #1a0a28, #3d1a5c);">⌨️</div>
+          <div class="project-visual-header header-keylogger">
+            <div class="visual-node node-1"></div>
+            <div class="visual-node node-2"></div>
+            <div class="visual-node node-3"></div>
+            <div class="visual-node node-4"></div>
+            <div class="visual-connection conn-1"></div>
+            <div class="visual-connection conn-2"></div>
+            <div class="visual-pulse-ring ring-1"></div>
+            <div class="visual-pulse-ring ring-2"></div>
+            <svg class="proj-svg" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+              <rect x="9" y="9" width="6" height="6"></rect>
+              <line x1="9" y1="1" x2="9" y2="4"></line>
+              <line x1="15" y1="1" x2="15" y2="4"></line>
+              <line x1="9" y1="20" x2="9" y2="23"></line>
+              <line x1="15" y1="20" x2="15" y2="23"></line>
+              <line x1="20" y1="9" x2="23" y2="9"></line>
+              <line x1="20" y1="15" x2="23" y2="15"></line>
+              <line x1="1" y1="9" x2="4" y2="9"></line>
+              <line x1="1" y1="15" x2="4" y2="15"></line>
+            </svg>
+          </div>
           <div class="project-img-overlay"></div>
         </div>
         <div class="project-body">
@@ -2901,12 +3248,18 @@
             a defensive cybersecurity perspective. Implements structured JSON/text logging, analyzed on Windows for
             security risk evaluation.</p>
           <div class="timeline-tags" style="margin-bottom:1rem;">
-            <span class="tag">Python</span><span class="tag">Windows OS</span><span class="tag">Structured
-              Logging</span><span class="tag">File Handling</span>
+            <span class="tag">Python</span>
+            <span class="tag">Windows OS</span>
+            <span class="tag">Structured Logging</span>
+            <span class="tag">File Handling</span>
           </div>
           <div class="project-links">
-            <a href="https://github.com/piyushprakash70/KeyStroke-Logging" target="_blank" class="project-link">GitHub
-              →</a>
+            <a href="https://github.com/piyushprakash70/KeyStroke-Logging" target="_blank" class="project-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              </svg>
+              GitHub
+            </a>
           </div>
         </div>
       </div>
@@ -2947,7 +3300,17 @@
             <span class="tag">Reconnaissance</span>
             <span class="tag">Vulnerability Scanning</span>
           </div>
-          <div class="training-status completed">✓ Completed</div>
+          <div style="display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap;">
+            <div class="training-status completed">✓ Completed</div>
+            <a href="https://www.linkedin.com/in/piyushprakash7/overlay/Certifications/1440620600/treasury/?profileId=ACoAAEaSwcYBtSrfm-1qkVOLSfFqHTlj6JnpRII"
+              target="_blank" class="cert-link" style="font-size: 0.75rem; border: 1px solid var(--border); padding: 0.3rem 0.8rem; border-radius: 4px; background: var(--surface2); color: var(--accent2); transition: all 0.2s;">
+              View Certificate <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.25rem;">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -3117,8 +3480,32 @@
   <!-- CERTIFICATES -->
   <section id="certificates">
     <div class="section-label">06 — Credentials</div>
-    <h2>Certificates</h2>
+    <h2>Certifications/Certificates</h2>
     <div class="certs-grid">
+
+      <div class="cert-card">
+        <div class="cert-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+          </svg>
+        </div>
+        <div class="cert-info">
+          <div class="cert-name">EC-Council Certified: Secure Computer User (C|SCU)</div>
+          <div class="cert-issuer">EC-Council</div>
+          <div class="cert-overlay">
+            <a href="https://www.linkedin.com/in/piyushprakash7/overlay/Certifications/969065280/treasury/?profileId=ACoAAEaSwcYBtSrfm-1qkVOLSfFqHTlj6JnpRII" target="_blank"
+              class="cert-link">View
+              Certificate <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg></a>
+          </div>
+        </div>
+      </div>
 
       <div class="cert-card">
         <div class="cert-icon">
@@ -3153,7 +3540,7 @@
           </svg>
         </div>
         <div class="cert-info">
-          <div class="cert-name">NASSCOM Certified: Cybersecurity Essentials</div>
+          <div class="cert-name">Cybersecurity Essentials</div>
           <div class="cert-issuer">NASSCOM India</div>
           <div class="cert-overlay">
             <a href="https://fsp-assessment-certificates.s3.ap-southeast-1.amazonaws.com/%27/s3/buckets/fsp-assessment-certificates%27/Piyush%2BPrakash_29666.pdf.pdf"
@@ -3190,29 +3577,6 @@
         </div>
       </div>
 
-      <div class="cert-card">
-        <div class="cert-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="8" r="7"></circle>
-            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-          </svg>
-        </div>
-        <div class="cert-info">
-          <div class="cert-name">Cybersecurity Essential</div>
-          <div class="cert-issuer">Lovely Professional University</div>
-          <div class="cert-overlay">
-            <a href="https://www.linkedin.com/in/piyushprakash7/overlay/Certifications/1440620600/treasury/?profileId=ACoAAEaSwcYBtSrfm-1qkVOLSfFqHTlj6JnpRII"
-              target="_blank" class="cert-link">View
-              Certificate <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg></a>
-          </div>
-        </div>
-      </div>
 
       <div class="cert-card">
         <div class="cert-icon">
@@ -3300,14 +3664,14 @@
 
       <div class="achievement-card">
         <div class="ach-icon">🌍</div>
-        <div class="ach-title">Top 4% Globally on TryHackMe — Feb 2026</div>
+        <div class="ach-title">Top 4% Globally on TryHackMe </div>
         <div class="ach-desc">Achieved a ranking in the top 4% among 6 million+ users on TryHackMe, demonstrating
           advanced practical cybersecurity and CTF skills.</div>
       </div>
 
       <div class="achievement-card">
         <div class="ach-icon">🏆</div>
-        <div class="ach-title">91st Rank — Hack Quest 24-Hour Challenge — Apr 2024</div>
+        <div class="ach-title">91st Rank — Hack Quest 24-Hour Challenge </div>
         <div class="ach-desc">Attained an impressive overall ranking of 91st out of 150+ participants in the Hack Quest
           24-Hour cybersecurity challenge.</div>
       </div>
@@ -3334,9 +3698,6 @@
           <div class="edu-period">Aug 2023 — Present</div>
           <div class="edu-degree">Bachelor of Technology — Computer Science & Engineering</div>
           <div class="edu-institution">Lovely Professional University, Phagwara, Punjab</div>
-          <!--<div class="edu-meta-row">
-            <div class="edu-badge">CGPA: 6.7</div>
-          </div> -->
           <p class="edu-desc">Currently pursuing B.Tech in Computer Science & Engineering with a focus on cybersecurity,
             ethical hacking, AI-based threat detection, and network security. Active participant in CTF challenges and
             cybersecurity research.</p>
@@ -3352,10 +3713,7 @@
           <div class="edu-period">May 2020 — Jun 2022</div>
           <div class="edu-degree">Intermediate (Class XII) — Science Stream</div>
           <div class="edu-institution">Narayana e-Techno School, South City-II, Gurgaon, Haryana</div>
-          <div class="edu-meta-row">
-            <!-- <div class="edu-badge">Percentage: 65%</div> -->
-            <div class="edu-badge edu-badge-sec">Physics · Chemistry · Maths · CS</div>
-          </div>
+
           <p class="edu-desc">Completed Intermediate education in the Science stream with Physics, Chemistry,
             Mathematics, and Computer Science at Narayana e-Techno School, Gurgaon.</p>
         </div>
@@ -3370,9 +3728,6 @@
           <div class="edu-period">Feb 2019 — Jun 2020</div>
           <div class="edu-degree">Matriculation (Class X)</div>
           <div class="edu-institution">Christ Church High School, Patna, Bihar</div>
-          <div class="edu-meta-row">
-            <!-- <div class="edu-badge">Percentage: 76%</div> -->
-          </div>
           <p class="edu-desc">Completed secondary education at Christ Church High School, Patna. Built early interest in
             computers and programming that led to a career in cybersecurity.</p>
         </div>
@@ -3483,8 +3838,8 @@
       <h2>Let's Connect</h2>
       <div class="contact-grid">
 
-        <div class="contact-info">
-          <h3>Say Hello 👋</h3>
+        <div class="contact-info reveal-left">
+          <h3>Say Hello <span class="wave-emoji">👋</span></h3>
           <p>Whether you have a project in mind, a question, or just want to chat about tech — my inbox is always open.
           </p>
           <div class="social-links">
@@ -3561,26 +3916,40 @@
     <!-- THEME SWITCHER -->
     <div id="theme-switcher">
       <div class="ts-panel" id="ts-panel">
-        <div class="ts-color" data-a="#38bdf8" data-a2="#c084fc"
+        <div class="ts-color" data-idx="0"
           style="background: linear-gradient(135deg, #38bdf8, #c084fc)" title="Sky & Purple"></div>
-        <div class="ts-color" data-a="#34d399" data-a2="#3b82f6"
+        <div class="ts-color" data-idx="1"
           style="background: linear-gradient(135deg, #34d399, #3b82f6)" title="Emerald & Blue"></div>
-        <div class="ts-color" data-a="#fbbf24" data-a2="#f43f5e"
+        <div class="ts-color" data-idx="2"
           style="background: linear-gradient(135deg, #fbbf24, #f43f5e)" title="Amber & Rose"></div>
-        <div class="ts-color" data-a="#a3e635" data-a2="#06b6d4"
+        <div class="ts-color" data-idx="3"
           style="background: linear-gradient(135deg, #a3e635, #06b6d4)" title="Lime & Cyan"></div>
       </div>
-      <div class="ts-toggle" id="ts-toggle" title="Change Theme">🎨</div>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <div class="ts-toggle" id="ts-toggle" title="Change Theme">🎨</div>
+        <button id="ts-mode-toggle" class="ts-toggle" title="Toggle Light/Dark Mode" style="border: 1px solid var(--border); outline: none; background: var(--surface2); color: var(--text);">
+          <span class="sun-icon">☀️</span>
+          <span class="moon-icon" style="display: none;">🌙</span>
+        </button>
+      </div>
     </div>
 
     <footer>
       <div class="footer-logo">PP.</div>
-      <p>© 2025 Piyush Prakash. Crafted with care.</p>
+      <p>© 2025 Piyush Prakash. Crafted with Care ❤️</p>
       <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent);">Cybersecurity ·
         Ethical Hacking →</p>
     </footer>
 
     <script>
+      /* ══════════════════════════
+         HEX TO RGB HELPER
+      ══════════════════════════ */
+      function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex.trim());
+        return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '56, 189, 248';
+      }
+
       /* ══════════════════════════
          PAGE LOADER
       ══════════════════════════ */
@@ -3619,8 +3988,8 @@
             const py = (b.y + Math.cos(ts * b.speed * 0.7 + b.phase) * 0.10) * H;
             const radius = b.r * Math.min(W, H);
             const g = cx.createRadialGradient(px, py, 0, px, py, radius);
-            g.addColorStop(0, `rgba(${b.color},0.13)`);
-            g.addColorStop(0.5, `rgba(${b.color},0.05)`);
+            g.addColorStop(0, `rgba(${b.color},0.07)`);
+            g.addColorStop(0.5, `rgba(${b.color},0.02)`);
             g.addColorStop(1, `rgba(${b.color},0)`);
             cx.beginPath();
             cx.arc(px, py, radius, 0, Math.PI * 2);
@@ -3633,36 +4002,73 @@
       })();
 
       /* ══════════════════════════
-         MATRIX RAIN
+         FLOWER PETAL FALL
       ══════════════════════════ */
       (function () {
-        const c = document.getElementById('matrix-canvas');
+        const c = document.getElementById('petals-canvas');
         const cx = c.getContext('2d');
-        let W, H, cols, drops = [];
-        const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ01ハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
-        const fs = 12;
+        let W, H, petals = [];
+
         function resize() {
           W = c.width = window.innerWidth;
           H = c.height = window.innerHeight;
-          cols = Math.floor(W / fs);
-          drops = Array.from({ length: cols }, () => Math.random() * -100);
         }
         resize();
         window.addEventListener('resize', resize);
-        function draw() {
-          cx.fillStyle = 'rgba(10,10,15,0.04)';
-          cx.fillRect(0, 0, W, H);
-          cx.font = fs + 'px monospace';
-          for (let i = 0; i < cols; i++) {
-            const char = chars[Math.floor(Math.random() * chars.length)];
-            const x = i * fs;
-            const y = drops[i] * fs;
-            const alpha = Math.random() * 0.6 + 0.2;
-            cx.fillStyle = `rgba(200,169,110,${alpha})`;
-            cx.fillText(char, x, y);
-            if (y > H && Math.random() > 0.975) drops[i] = 0;
-            drops[i] += 0.35;
+
+        class Petal {
+          constructor() { this.reset(); }
+          reset() {
+            this.x = Math.random() * W;
+            this.y = Math.random() * -H - 20;
+            this.w = Math.random() * 6 + 5;
+            this.h = Math.random() * 10 + 7;
+            this.r = Math.random() * 360;
+            this.rs = (Math.random() - 0.5) * 1.2;
+            this.vx = (Math.random() - 0.5) * 0.8;
+            this.vy = Math.random() * 0.8 + 0.5;
+            this.alpha = Math.random() * 0.45 + 0.15;
+            this.oscSpeed = Math.random() * 0.02 + 0.005;
+            this.oscPhase = Math.random() * Math.PI * 2;
+            const pinks = ['236,72,153', '219,39,119', '244,63,94', '225,29,72', '204,30,90'];
+            this.color = pinks[Math.floor(Math.random() * pinks.length)];
           }
+          update() {
+            this.y += this.vy;
+            this.oscPhase += this.oscSpeed;
+            this.x += this.vx + Math.sin(this.oscPhase) * 0.4;
+            this.r += this.rs;
+            if (this.y > H || this.x < -20 || this.x > W + 20) {
+              this.reset();
+              this.y = -20;
+            }
+          }
+          draw() {
+            cx.save();
+            cx.translate(this.x, this.y);
+            cx.rotate(this.r * Math.PI / 180);
+            cx.beginPath();
+            cx.moveTo(0, 0);
+            cx.bezierCurveTo(-this.w * 0.8, -this.h * 0.3, -this.w * 0.8, -this.h * 0.8, -this.w * 0.3, -this.h);
+            cx.quadraticCurveTo(0, -this.h * 0.8, this.w * 0.3, -this.h);
+            cx.bezierCurveTo(this.w * 0.8, -this.h * 0.8, this.w * 0.8, -this.h * 0.3, 0, 0);
+            cx.closePath();
+            cx.fillStyle = `rgba(${this.color},${this.alpha})`;
+            cx.fill();
+            cx.restore();
+          }
+        }
+
+        for (let i = 0; i < 55; i++) {
+          petals.push(new Petal());
+        }
+
+        function draw() {
+          cx.clearRect(0, 0, W, H);
+          petals.forEach(p => {
+            p.update();
+            p.draw();
+          });
           requestAnimationFrame(draw);
         }
         draw();
@@ -3743,16 +4149,20 @@
         constructor() { this.reset(); }
         reset() {
           this.x = Math.random() * pW; this.y = Math.random() * pH;
-          this.r = Math.random() * 1.8 + 0.3;
-          this.vx = (Math.random() - 0.5) * 0.4; this.vy = (Math.random() - 0.5) * 0.4;
-          this.alpha = Math.random() * 0.6 + 0.1;
-          this.color = Math.random() > 0.5 ? '200,169,110' : '124,111,255';
+          this.r = Math.random() * 1.5 + 0.3;
+          this.vx = (Math.random() - 0.5) * 0.18; this.vy = (Math.random() - 0.5) * 0.18;
+          this.alpha = Math.random() * 0.35 + 0.05;
+          const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+          const accentHex2 = getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim();
+          const rgb1 = hexToRgb(accentHex);
+          const rgb2 = hexToRgb(accentHex2);
+          this.color = Math.random() > 0.5 ? rgb1 : rgb2;
           this.pulse = Math.random() * Math.PI * 2;
         }
         update(ts) {
           this.x += this.vx; this.y += this.vy;
-          this.pulse += 0.02;
-          this.displayR = this.r * (0.8 + 0.2 * Math.sin(this.pulse));
+          this.pulse += 0.015;
+          this.displayR = this.r * (0.85 + 0.15 * Math.sin(this.pulse));
           if (this.x < 0 || this.x > pW || this.y < 0 || this.y > pH) this.reset();
         }
         draw() {
@@ -3762,18 +4172,20 @@
           ctx.fill();
         }
       }
-      for (let i = 0; i < 100; i++) particles.push(new Particle());
+      for (let i = 0; i < 90; i++) particles.push(new Particle());
       function drawConnections() {
+        const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        const rgb1 = hexToRgb(accentHex);
         for (let i = 0; i < particles.length; i++) {
           for (let j = i + 1; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
             const d = Math.sqrt(dx * dx + dy * dy);
-            if (d < 120) {
+            if (d < 110) {
               ctx.beginPath();
               ctx.moveTo(particles[i].x, particles[i].y);
               ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = `rgba(200,169,110,${0.08 * (1 - d / 120)})`;
-              ctx.lineWidth = 0.5; ctx.stroke();
+              ctx.strokeStyle = `rgba(${rgb1},${0.04 * (1 - d / 110)})`;
+              ctx.lineWidth = 0.4; ctx.stroke();
             }
           }
         }
@@ -3798,26 +4210,65 @@
       });
 
       /* ══════════════════════════
-         SCROLL PROGRESS
+         HIGH-PERFORMANCE SCROLL SYSTEM
       ══════════════════════════ */
       const progressBar = document.getElementById('scroll-progress');
-      window.addEventListener('scroll', () => {
-        const total = document.body.scrollHeight - window.innerHeight;
-        progressBar.style.width = (window.scrollY / total * 100) + '%';
-      });
-
-      /* ══════════════════════════
-         NAV + ACTIVE LINKS
-      ══════════════════════════ */
       const nav = document.getElementById('nav');
       const navLinks = document.querySelectorAll('.nav-links a');
       const allSections = document.querySelectorAll('section[id], div[id]');
+
+      let lastSection = '';
+      const sectionBadge = document.createElement('div');
+      sectionBadge.style.cssText = `position:fixed;bottom:2rem;left:2rem;z-index:500;font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);letter-spacing:0.12em;transition:all 0.4s ease;opacity:0;`;
+      document.body.appendChild(sectionBadge);
+
+      let sectionOffsets = [];
+      let totalScrollHeight = 0;
+
+      function cacheScrollParams() {
+        totalScrollHeight = document.body.scrollHeight - window.innerHeight;
+        sectionOffsets = Array.from(allSections).map(sec => ({
+          id: sec.id,
+          top: sec.offsetTop
+        }));
+      }
+
+      window.addEventListener('load', cacheScrollParams);
+      window.addEventListener('resize', cacheScrollParams);
+      setTimeout(cacheScrollParams, 2000);
+
       window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 60);
+        const sy = window.scrollY;
+
+        // 1. Scroll Progress Bar (Uses cached height, zero layout thrashing)
+        if (totalScrollHeight > 0) {
+          progressBar.style.width = (sy / totalScrollHeight * 100) + '%';
+        }
+
+        // 2. Scrolled Navbar & Back-to-Top Button
+        nav.classList.toggle('scrolled', sy > 60);
+        document.getElementById('scroll-top').classList.toggle('visible', sy > 400);
+
+        // 3. Active section navigation links & badge
         let current = '';
-        allSections.forEach(sec => { if (window.scrollY >= sec.offsetTop - 200) current = sec.id; });
-        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
-        document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
+        for (let i = 0; i < sectionOffsets.length; i++) {
+          if (sy >= sectionOffsets[i].top - 280) {
+            current = sectionOffsets[i].id;
+          }
+        }
+
+        if (current) {
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+
+          if (current !== lastSection) {
+            lastSection = current;
+            const labels = { 'about': '01', 'internship': '02', 'projects': '03', 'training': '04', 'skills': '05', 'certificates': '06', 'achievements': '07', 'education': '08', 'resume': '09', 'contact': '10' };
+            sectionBadge.style.opacity = '1';
+            sectionBadge.textContent = (labels[current] || '--') + ' / 10';
+            clearTimeout(sectionBadge._t);
+            sectionBadge._t = setTimeout(() => sectionBadge.style.opacity = '0', 2000);
+          }
+        }
       });
 
       /* ══════════════════════════
@@ -3852,7 +4303,7 @@
       }, { threshold: 0.1 });
       document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.edu-card').forEach(el => revealObs.observe(el));
       document.querySelectorAll('section h2, #internship h2, #resume h2, #contact h2').forEach(el => { el.classList.add('reveal'); revealObs.observe(el); });
-      document.querySelectorAll('.project-card').forEach((el, i) => { el.classList.add('reveal', `delay-${(i % 3) + 1}`, 'tilt-card'); revealObs.observe(el); });
+      document.querySelectorAll('.project-card').forEach((el, i) => { el.classList.add('reveal', `delay-${(i % 3) + 1}`); revealObs.observe(el); });
       document.querySelectorAll('.cert-card').forEach((el, i) => { el.classList.add('reveal', `delay-${(i % 4) + 1}`); revealObs.observe(el); });
       document.querySelectorAll('.achievement-card').forEach((el, i) => { el.classList.add('reveal', `delay-${(i % 3) + 1}`); revealObs.observe(el); });
       document.querySelectorAll('.timeline-item').forEach((el, i) => { el.classList.add('reveal', `delay-${i + 1}`); revealObs.observe(el); });
@@ -3903,22 +4354,9 @@
       document.querySelectorAll('.stat-number').forEach(el => counterObs.observe(el));
 
       /* ══════════════════════════
-         3D CARD TILT
+         MAGNETIC INTERACTIVE ELEMENTS
       ══════════════════════════ */
-      document.addEventListener('mousemove', e => {
-        document.querySelectorAll('.tilt-card').forEach(card => {
-          const r = card.getBoundingClientRect();
-          const dx = (e.clientX - r.left - r.width / 2) / (r.width / 2);
-          const dy = (e.clientY - r.top - r.height / 2) / (r.height / 2);
-          const inRange = Math.abs(dx) < 1.5 && Math.abs(dy) < 1.5;
-          card.style.transform = inRange ? `perspective(800px) rotateX(${-dy * 6}deg) rotateY(${dx * 6}deg) translateY(-6px)` : '';
-        });
-      });
-
-      /* ══════════════════════════
-         MAGNETIC BUTTONS
-      ══════════════════════════ */
-      document.querySelectorAll('.btn').forEach(btn => {
+      document.querySelectorAll('.btn, .social-link').forEach(btn => {
         btn.addEventListener('mousemove', e => {
           const r = btn.getBoundingClientRect();
           const x = e.clientX - r.left - r.width / 2;
@@ -3928,25 +4366,7 @@
         btn.addEventListener('mouseleave', () => btn.style.transform = '');
       });
 
-      /* ══════════════════════════
-         SECTION SECTION COUNTER BADGE
-      ══════════════════════════ */
-      let lastSection = '';
-      const sectionBadge = document.createElement('div');
-      sectionBadge.style.cssText = `position:fixed;bottom:2rem;left:2rem;z-index:500;font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);letter-spacing:0.12em;transition:all 0.4s ease;opacity:0;`;
-      document.body.appendChild(sectionBadge);
-      window.addEventListener('scroll', () => {
-        let current = '';
-        const labels = { 'about': '01', 'internship': '02', 'projects': '03', 'training': '04', 'skills': '05', 'certificates': '06', 'achievements': '07', 'education': '08', 'resume': '09', 'contact': '10' };
-        allSections.forEach(sec => { if (window.scrollY >= sec.offsetTop - 300) current = sec.id; });
-        if (current && current !== lastSection) {
-          lastSection = current;
-          sectionBadge.style.opacity = '1';
-          sectionBadge.textContent = (labels[current] || '--') + ' / 10';
-          clearTimeout(sectionBadge._t);
-          sectionBadge._t = setTimeout(() => sectionBadge.style.opacity = '0', 2000);
-        }
-      });
+
 
       /* ══════════════════════════
          MOUSE-REACTIVE AURORA TINT
@@ -4026,15 +4446,92 @@
       ══════════════════════════ */
       const tsToggle = document.getElementById('ts-toggle');
       const tsPanel = document.getElementById('ts-panel');
-      tsToggle.addEventListener('click', () => tsPanel.classList.toggle('open'));
+
+      tsToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        tsPanel.classList.toggle('open');
+      });
+
+      // Close panel when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!tsPanel.contains(e.target) && e.target !== tsToggle) {
+          tsPanel.classList.remove('open');
+        }
+      });
+
+      const themeAccents = {
+        dark: [
+          { a: '#38bdf8', a2: '#c084fc' },
+          { a: '#34d399', a2: '#3b82f6' },
+          { a: '#fbbf24', a2: '#f43f5e' },
+          { a: '#a3e635', a2: '#06b6d4' }
+        ],
+        light: [
+          { a: '#0284c7', a2: '#7c3aed' },
+          { a: '#059669', a2: '#1d4ed8' },
+          { a: '#d97706', a2: '#be185d' },
+          { a: '#4d7c0f', a2: '#0369a1' }
+        ]
+      };
+
+      function setAccentTheme(idx) {
+        const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+        const colors = themeAccents[theme][idx] || themeAccents[theme][0];
+        
+        document.documentElement.style.setProperty('--accent', colors.a);
+        document.documentElement.style.setProperty('--accent2', colors.a2);
+        
+        const rgb1 = hexToRgb(colors.a);
+        const rgb2 = hexToRgb(colors.a2);
+        document.documentElement.style.setProperty('--accent-rgb', rgb1);
+        document.documentElement.style.setProperty('--accent2-rgb', rgb2);
+        
+        localStorage.setItem('portfolio-accent', colors.a);
+        localStorage.setItem('portfolio-accent2', colors.a2);
+        localStorage.setItem('portfolio-accent-index', idx);
+      }
 
       document.querySelectorAll('.ts-color').forEach(btn => {
         btn.addEventListener('click', () => {
-          document.documentElement.style.setProperty('--accent', btn.dataset.a);
-          document.documentElement.style.setProperty('--accent2', btn.dataset.a2);
+          const idx = parseInt(btn.dataset.idx, 10);
+          setAccentTheme(idx);
           tsPanel.classList.remove('open');
         });
       });
+
+      function toggleThemeMode() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('portfolio-theme', newTheme);
+        
+        let savedIndex = localStorage.getItem('portfolio-accent-index') || '0';
+        setAccentTheme(parseInt(savedIndex, 10));
+        
+        updateToggleBtnIcons(newTheme);
+      }
+
+      function updateToggleBtnIcons(theme) {
+        const sunIcons = document.querySelectorAll('.sun-icon');
+        const moonIcons = document.querySelectorAll('.moon-icon');
+        
+        if (theme === 'light') {
+          sunIcons.forEach(icon => icon.style.display = 'none');
+          moonIcons.forEach(icon => icon.style.display = 'block');
+        } else {
+          sunIcons.forEach(icon => icon.style.display = 'block');
+          moonIcons.forEach(icon => icon.style.display = 'none');
+        }
+      }
+
+      // Hook toggle buttons
+      const tsModeToggle = document.getElementById('ts-mode-toggle');
+      if (tsModeToggle) tsModeToggle.addEventListener('click', toggleThemeMode);
+
+      // Sync icons on startup
+      const initialTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      updateToggleBtnIcons(initialTheme);
     </script>
 </body>
 
